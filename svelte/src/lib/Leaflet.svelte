@@ -2,6 +2,6 @@
     let mapElement: HTMLDivElement;
 </script>
 
-<div class="w-full h-full" bind:this={mapElement}>
+<div style="width: 100% heigh: 100%" bind:this={mapElement}>
     <slot />
 </div>

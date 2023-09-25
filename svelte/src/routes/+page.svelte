@@ -18,6 +18,9 @@
 <div style="float: left;" class="w-2/6 h-screen">
 	<h1 class="text-2xl text-center pt-6"> Tågförseningar </h1>
 	{#if delayedTrains}
+		{#each delayedTrains as train}
+			<p> {train.TrainOwner} </p>
+		{/each}
 		<h2>{delayedTrains}</h2>
 	{/if}
 

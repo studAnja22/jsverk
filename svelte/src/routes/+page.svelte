@@ -15,7 +15,7 @@
 	<Leaflet view={initialView} zoom={5}>
 		{#each markerLocations as latLng}
 			<Marker {latLng} width={40} height={40}>
-				<Popup>Like & Subscribe!</Popup>
+				<Popup>Lorem ipsum</Popup>
 			</Marker>
 		{/each}
 	</Leaflet>

@@ -19,3 +19,5 @@ Nu går det att exekvera reset och error no such table har åtgärdats.
 >[video]. Youtube. https://www.youtube.com/watch?v=MnpuK0MK4yo
   
 Vi valde att arbeta med Svelte som jsramverk.
+
+Att starta svelte servern kör `npm run dev` lägger till `-- --open` i kommandot för att automatiskt öppna localhost i standard browsern under svelte directory (`./svelte`)

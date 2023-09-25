@@ -1,47 +1,27 @@
-import { env } from '$env/static/private'
+import { TRAFIKVERKET_API_KEY } from '$env/static/private'
 export const load = async () => {
-    const query = `<REQUEST>
-                    <LOGIN authenticationkey="${env.TRAFIKVERKET_API_KEY}" />
-                    <QUERY objecttype="TrainAnnouncement" orderby='AdvertisedTimeAtLocation' schemaversion="1.8">
-                        <FILTER>
-                        <AND>
-                            <EQ name="ActivityType" value="Avgang" />
-                            <GT name="EstimatedTimeAtLocation" value="$now" />
-                            <AND>
-                                <GT name='AdvertisedTimeAtLocation' value='$dateadd(-00:15:00)' />
-                                <LT name='AdvertisedTimeAtLocation'                   value='$dateadd(02:00:00)' />
-                            </AND>
-                        </AND>
-                        </FILTER>
-                        <INCLUDE>ActivityId</INCLUDE>
-                        <INCLUDE>ActivityType</INCLUDE>
-                        <INCLUDE>AdvertisedTimeAtLocation</INCLUDE>
-                        <INCLUDE>EstimatedTimeAtLocation</INCLUDE>
-                        <INCLUDE>AdvertisedTrainIdent</INCLUDE>
-                        <INCLUDE>OperationalTrainNumber</INCLUDE>
-                        <INCLUDE>Canceled</INCLUDE>
-                        <INCLUDE>FromLocation</INCLUDE>
-                        <INCLUDE>ToLocation</INCLUDE>
-                        <INCLUDE>LocationSignature</INCLUDE>
-                        <INCLUDE>TimeAtLocation</INCLUDE>
-                        <INCLUDE>TrainOwner</INCLUDE>
-                    </QUERY>
+    const fetchDelayedTrains = async () => {
+        const query = `<REQUEST>
+            <LOGIN authenticationkey="${TRAFIKVERKET_API_KEY}" />
+            <QUERY objecttype="TrainStation" schemaversion="1">
+            <FILTER>
+                  <EQ name="Advertised" value="true" />
+            </FILTER>
+            <INCLUDE>AdvertisedLocationName</INCLUDE>
+            </QUERY>
             </REQUEST>`;
 
-
-
-    const fetchDelayedTrains = async () => {
-        const trains = await fetch("https://api.trafikinfo.trafikverket.se/v2/data.json", {
+        const response = fetch(
+            "https://api.trafikinfo.trafikverket.se/v2/data.json", {
                 method: "POST",
                 body: query,
                 headers: { "Content-Type": "text/xml" }
-            })
-        return trains
-
+            }
+        )
+        const data = await response.json()
+        return data.results
     }
     return {
-        DelayedTrains: fetchDelayedTrains()
+        delayedTrains: fetchDelayedTrains()
     }
 }
-
-export let segment = undefined;
